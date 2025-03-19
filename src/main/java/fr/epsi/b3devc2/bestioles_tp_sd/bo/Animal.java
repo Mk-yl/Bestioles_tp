@@ -30,12 +30,12 @@ public class Animal  implements Serializable {
     public Animal() {
     }
 
-    public Animal(String color, String name, String sex, Species species, Set<Person> persons) {
+    public Animal(String color, String name, String sex, Species species) {
         this.color = color;
         this.name = name;
         this.sex = sex;
         this.species = species;
-        this.persons = persons;
+
     }
 
     public Integer getId() {

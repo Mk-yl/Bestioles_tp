@@ -19,10 +19,10 @@ public class Species implements Serializable{
     public Species() {
     }
 
-    public Species(String commonName, String latinName, Set<Animal> animals) {
+    public Species(String commonName, String latinName) {
         this.commonName = commonName;
         this.latinName = latinName;
-        this.animals = animals;
+
     }
 
     public Integer getId() {

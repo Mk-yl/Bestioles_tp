@@ -10,6 +10,7 @@ import fr.epsi.b3devc2.bestioles_tp_sd.repository.*;
 
 
 import java.util.Optional;
+import java.util.Set;
 
 @SpringBootApplication
 public class BestiolesTpSdApplication implements CommandLineRunner {
@@ -19,6 +20,13 @@ public class BestiolesTpSdApplication implements CommandLineRunner {
 
     @Autowired
     private AnimalRepository animalRepository;
+
+    @Autowired
+    private SpeciesRepository speciesRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     public static void main(String[] args) {
         SpringApplication.run(BestiolesTpSdApplication.class, args);
@@ -35,8 +43,43 @@ public class BestiolesTpSdApplication implements CommandLineRunner {
 
 
         //  Ajouter des entités
-        Person person = new Person( 21 , "Jean", "Dupont", " mkl" , "mkl01", true );
+        Role role = new Role("admin");
+        Person person = new Person( 21 , "mkl", "Dupont", " mk1l" , "mkl01", true );
+        Species species = new Species("chien", "canis lupus" );
+        Animal animal = new Animal("rouge", "chien", "m", species);
+
+        animalRepository.save(animal);
         personRepository.save(person);
+        roleRepository.save(role);
+
+        //Rechercher une entité par son id avec findById
+
+        Optional<Person> person1 = personRepository.findById(1);
+        System.out.println("Personne avec id 1 : " + person1);
+
+        //Supprimer une entité avec delete, et afficher la longueur de la liste de toutes les entités
+        //pour vérifier qu’elle a bien été supprimée
+
+        personRepository.delete(person);
+
+        System.out.println(" Liste des personnes : " + personRepository.findAll().size());
+
+        //delete by id
+        personRepository.deleteById(1);
+        System.out.println(" Liste des personnes : " + personRepository.findAll().size());
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

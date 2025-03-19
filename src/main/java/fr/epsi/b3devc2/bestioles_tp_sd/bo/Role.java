@@ -21,9 +21,9 @@ public class Role implements Serializable{
     public Role() {
     }
 
-    public Role(String label, Set<Person> persons) {
+    public Role(String label) {
         this.label = label;
-        this.persons = persons;
+
     }
 
     public Integer getId() {
