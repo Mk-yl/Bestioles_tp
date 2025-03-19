@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Integer> {
+public interface PersonRepository extends JpaRepository<Person, Integer> , PersonRepositoryCustom {
 
     //tp4
     List<Person> findAllByLastnameOrFirstname(String lastname, String firstname);

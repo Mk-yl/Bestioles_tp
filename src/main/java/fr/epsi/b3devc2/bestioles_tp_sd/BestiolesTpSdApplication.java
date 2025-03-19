@@ -81,13 +81,11 @@ public class BestiolesTpSdApplication implements CommandLineRunner {
 
 
 
+        // Générer 10 personnes aléatoires
+        personRepository.generateRandomPersons(10);
 
-
-
-
-
-
-
+        // supprimer les personnes qui n'ont pas d'animaux
+        personRepository.deletePersonsWithoutAnimals();
 
 
         System.out.println("🚀 Fin des tests !");
