@@ -36,6 +36,7 @@ public class BestiolesTpSdApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Démarrage des tests... ");
 
+
         // Afficher toutes les personnes et animaux
         System.out.println(" Liste des personnes : " + personRepository.findAll());
 
@@ -71,7 +72,12 @@ public class BestiolesTpSdApplication implements CommandLineRunner {
 
 
 
+        // utilser les méthodes de recherche personnalisées existsByOwner
 
+        System.out.println("Animal appartient à au moins une personne : " + animalRepository.existsByOwner(9));
+
+
+        System.out.println("cette animal appartien a : " + personRepository.findByAnimal(1));
 
 
 
