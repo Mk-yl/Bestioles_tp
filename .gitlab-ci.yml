@@ -1,0 +1,73 @@
+image: maven:3.8.5-openjdk-17
+
+stages:
+  - build
+  - lint
+  - test
+  - quality
+  - package
+  - docker
+
+variables:
+  MAVEN_CLI_OPTS: "-s settings.xml --batch-mode"
+  SONAR_HOST_URL: "https://sonarcloud.io"
+  SPRING_PROFILES_ACTIVE: "test"
+
+before_script:
+  - echo "Using Maven version: $(mvn -version)"
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+
+lint:
+  stage: lint
+  script:
+    - mvn $MAVEN_CLI_OPTS checkstyle:check
+
+test:
+  stage: test
+  services:
+    - name: mysql:8.0
+      alias: mysql
+  variables:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: bestioles
+    MYSQL_USER: java
+    MYSQL_PASSWORD: java
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+    - mvn $MAVEN_CLI_OPTS jacoco:report
+  artifacts:
+    reports:
+      junit: target/surefire-reports/*.xml
+    paths:
+      - target/site/jacoco
+
+quality:
+  stage: quality
+  script:
+    - mvn $MAVEN_CLI_OPTS sonar:sonar -Dsonar.projectKey=Bestioles_tp -Dsonar.organization=mon-org-sonarcloud -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
+  only:
+    - main
+
+package:
+  stage: package
+  script:
+    - mvn $MAVEN_CLI_OPTS package
+  artifacts:
+    paths:
+      - target/*.jar
+
+docker:
+  stage: docker
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t registry.gitlab.com/Bestioles_tp/bestioles:latest .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - docker push registry.gitlab.com/Bestioles_tp/bestioles:latest
+  only:
+    - main
